@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kumpulan Rumus Interaktif</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .rumus-box {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 15px;
+      min-height: 280px;
+    }
+    .rumus-box h2 {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+    .triangle-wrapper {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 10px;
+    }
+    .triangle {
+      width: 0;
+      height: 0;
+      border-left: 180px solid transparent;
+      border-bottom: 180px solid #ccc;
+    }
+    .label {
+      position: absolute;
+      font-weight: bold;
+      font-size: 14px;
+      background-color: rgba(255,255,255,0.8);
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    .label-a { right: 10px; top: 90px; }
+    .label-b { bottom: 5px; left: 90px; }
+    .label-c { top: 25px; left: 80px; transform: rotate(-45deg); }
+    input, select {
+      width: 90px;
+      margin: 4px 4px 10px 0;
+      padding: 5px;
+    }
+    button {
+      padding: 6px 12px;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+    .result, .formula {
+      font-size: 14px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kumpulan Rumus Interaktif</h1>
+  <div class="grid">
+    <div class="rumus-box">
+      <h2>Segitiga Siku-Siku</h2>
+      <div class="triangle-wrapper">
+        <div class="triangle"></div>
+        <div class="label label-a" id="labelA">a (tinggi)</div>
+        <div class="label label-b" id="labelB">b (alas)</div>
+        <div class="label label-c" id="labelC">c (miring)</div>
+      </div>
+      <div>
+        <input type="number" id="a" placeholder="a" />
+        <input type="number" id="b" placeholder="b" />
+        <input type="number" id="c" placeholder="c" />
+        <select id="satuan">
+          <option value="cm">cm</option>
+          <option value="mm">mm</option>
+          <option value="m">m</option>
+        </select>
+        <br />
+        <button onclick="hitung()">Hitung</button>
+        <div class="formula" id="rumus"></div>
+        <div class="result" id="hasil"></div>
+        
+      </div>
+    </div>
+
+    <div class="rumus-box"><h2>Rumus 2</h2></div>
+    <div class="rumus-box"><h2>Rumus 3</h2></div>
+    <div class="rumus-box"><h2>Rumus 4</h2></div>
+    <div class="rumus-box"><h2>Rumus 5</h2></div>
+    <div class="rumus-box"><h2>Rumus 6</h2></div>
+    <div class="rumus-box"><h2>Rumus 7</h2></div>
+    <div class="rumus-box"><h2>Rumus 8</h2></div>
+  </div>
+
+  <script>
+    function hitung() {
+      const satuan = document.getElementById('satuan').value;
+      const a = parseFloat(document.getElementById('a').value);
+      const b = parseFloat(document.getElementById('b').value);
+      const c = parseFloat(document.getElementById('c').value);
+      
+      let rumus = '';
+      let hasil = '';
+
+      if (!isNaN(a) && !isNaN(b) && isNaN(c)) {
+        const cVal = Math.sqrt(a * a + b * b);
+        hasil = `c = √(${a}² + ${b}²) = ${cVal.toFixed(2)} ${satuan}`;
+        rumus = `c = √(${a ** 2} + ${b ** 2})`;
+        const luas = 0.5 * a * b;
+        hasil += `<br>Luas = ½ × ${a} × ${b} = ${luas.toFixed(2)} ${satuan}²`;
+        document.getElementById("labelC").innerText = `c = ${cVal.toFixed(2)} ${satuan}`;
+      } else if (!isNaN(c) && !isNaN(b) && isNaN(a)) {
+        if(c <= b) {
+          hasil = 'Nilai c harus lebih besar dari b.';
+          rumus = '';
+        } else {
+          const aVal = Math.sqrt(c * c - b * b);
+          hasil = `a = √(${c}² - ${b}²) = ${aVal.toFixed(2)} ${satuan}`;
+          rumus = `a = √(${c ** 2} - ${b ** 2})`;
+          const luas = 0.5 * aVal * b;
+          hasil += `<br>Luas = ½ × ${aVal.toFixed(2)} × ${b} = ${luas.toFixed(2)} ${satuan}²`;
+          document.getElementById("labelA").innerText = `a = ${aVal.toFixed(2)} ${satuan}`;
+        }
+      } else if (!isNaN(c) && !isNaN(a) && isNaN(b)) {
+        if(c <= a) {
+          hasil = 'Nilai c harus lebih besar dari a.';
+          rumus = '';
+        } else {
+          const bVal = Math.sqrt(c * c - a * a);
+          hasil = `b = √(${c}² - ${a}²) = ${bVal.toFixed(2)} ${satuan}`;
+          rumus = `b = √(${c ** 2} - ${a ** 2})`;
+          const luas = 0.5 * a * bVal;
+          hasil += `<br>Luas = ½ × ${a} × ${bVal.toFixed(2)} = ${luas.toFixed(2)} ${satuan}²`;
+          document.getElementById("labelB").innerText = `b = ${bVal.toFixed(2)} ${satuan}`;
+        }
+      } else {
+        hasil = 'Isi tepat dua sisi untuk menghitung sisi ketiga dan luas!';
+        rumus = '';
+      }
+
+      document.getElementById('hasil').innerHTML = hasil;
+      document.getElementById('rumus').innerText = rumus;
+    }
+  </script>
+</body>
+</html>
